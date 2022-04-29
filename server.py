@@ -4,7 +4,6 @@ import Pyro5.api
 
 # Marca a classe (ou método) que vai ser exposta em chamadas remotas
 @expose
-
 # Especifica o comportamento do server
 # Uma única instância será criada e usada para para todas as chamadas de método ("single")
 @behavior(instance_mode="single")
@@ -26,17 +25,19 @@ class QuizServer(object):
         
         try:
 
-            # Tranforma a entrada do usuário em um array
+            # Tranforma a entrada do usuário em um array e atribui os valores do array as variaveis
             message = message.split(";")
             number = int(message[0]) 
             alternatives = int(message[1])
             answer = message[2]
 
+            # Para cada questão do gabarito, compara se o número da questão inserida corresponde a alguma questão
             for question in self.answers:
                 counter = 0
                 sucesses = 0
                 errors = 0    
                 if question.number == number:
+                    # Caso a questão tenha sido encontrada
                     for alternative in question.answer:
                         # Compara a resposta com o gabarito
                         if alternative == answer[counter]: # Se for correta incrementa a variável sucesses

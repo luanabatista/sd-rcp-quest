@@ -1,8 +1,6 @@
 from Pyro5.api import Proxy
 
-# Cria proxy
-# Proxy do pyro para objetos remotos
-# Intercepts method calls and dispatches them to the remote object.
+# Cria proxy do Pyro para objetos remotos
 # Intercepta chamadas de metodos e as envia para o objeto remoto
 quizserver = Proxy("PYRONAME:quizserver")
 
