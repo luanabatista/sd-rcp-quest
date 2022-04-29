@@ -56,13 +56,17 @@ class QuizServer(object):
 # Cria um daemon
 daemon = Pyro5.server.Daemon()
 
-#Encontra o nome do servidor
+#Encontra o Name Server
+''' 
+Name Server é uma ferramenta para ajudar a manter o controle dos obejtos na rede.
+Ela da nomes lógicos aos objetos ao invés de ter que saber sempre o nome e localização exatas
+'''
 ns = Pyro5.api.locate_ns()
 
 # Registra o QuizServer como um objeto pyro
 uri = daemon.register(QuizServer)
 
-# Registra o objeto com um nome no servidor
+# Registra o objeto no Name Server
 ns.register("quizserver", uri)
 
 print("Ready.")
