@@ -2,10 +2,17 @@ from Pyro5.api import expose, behavior
 from question import Question
 import Pyro5.api
 
+# Marca a classe (ou método) que vai ser exposta em chamadas remotas
 @expose
+
+# Especifica o comportamento do server
+# Uma única instância será criada e usada para para todas as chamadas de método ("single")
 @behavior(instance_mode="single")
+
+
 class QuizServer(object):
 
+    # Define o gabarito das questões
     def __init__(self):
         self.requests = []
         self.answers = [
@@ -18,6 +25,8 @@ class QuizServer(object):
     def correctQuestion(self, message):
         
         try:
+
+            # Tranforma a entrada do usuário em um array
             message = message.split(";")
             number = int(message[0]) 
             alternatives = int(message[1])
@@ -33,7 +42,8 @@ class QuizServer(object):
                         if alternative == answer[counter]: # Se for correta incrementa a variável sucesses
                             sucesses += 1
 
-                        else: # Se for incorreta incrementa a variável errors
+                        # Se for incorreta incrementa a variável errors
+                        else:
                             errors += 1
                         counter += 1      
                     return f'\nQuestão: {number}; Acertos: {sucesses}; Erros:{errors}'
@@ -41,11 +51,18 @@ class QuizServer(object):
         except:
             return f"Erro ao processar requisição {message}"
 
-# main program
-daemon = Pyro5.server.Daemon()         # make a Pyro daemon
-ns = Pyro5.api.locate_ns()             # find the name server
-uri = daemon.register(QuizServer)   # register the CounterServer as a Pyro object
-ns.register("quizserver", uri)      # register the object with a name in the name server
+# Programa principal
+# Cria um daemon
+daemon = Pyro5.server.Daemon()
+
+#Encontra o nome do servidor
+ns = Pyro5.api.locate_ns()
+
+# Registra o QuizServer como um objeto pyro
+uri = daemon.register(QuizServer)
+
+# Registra o objeto com um nome no servidor
+ns.register("quizserver", uri)
 
 print("Ready.")
 daemon.requestLoop()   
